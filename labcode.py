@@ -1,38 +1,40 @@
 import csv
 import random
-with open("books.csv") as r_file:
+max_name = 30
+min_year = 18
+with open('books.csv') as file:
 
-    file_reader = csv.DictReader(r_file, delimiter = ";")
+    file_reader = csv.DictReader(file, delimiter=';')
     books = []
-    count = 0
-    k = 0
-    k1 = 0
-    s0 = input('Введите автора.')
+    records_num = 0
+    long_names_num = 0
+    found_books = 0
+    input_author = input('Введите автора.')
 
     for row in file_reader:
-        count += 1
+        records_num += 1
         books.append(row)
         name = row['Название']
         date = row['Дата поступления']
-        avt = row['Автор']
-        if len(name)>30:
-            k +=1
+        author = row['Автор']
+        if len(name) > max_name:
+            long_names_num += 1
 
-        d=int(date[8:10])
-        if d > 17 and avt == s0:
-            k1 +=1
-            print(f'Книги { s0 } от 2018 года: {name}')
+        year = int(date[8:10])
+        if year >= min_year and author == input_author:
+            found_books += 1
+            print(f'Книги { input_author } от 2018 года: {name}')
 
-    print(f'В файле { count } записей.')
-    print(f'В файле { k } записей имеют название книги длиной более 30 символов.')
-    if k1 < 1:
+    print(f'В файле { records_num } записей.')
+    print(f'В файле { long_names_num } записей имеют название книги длиной более 30 символов.')
+    if found_books < 1:
         print('Такой книги не найдено.')
 
-    with open("test.txt", "w") as myfile:
+    with open("test.txt", "w") as my_file:
         for i in range(20):
-            num = random.randint(1, count)
-            s = books[num]
-            a = s['Автор']
-            n = s['Название']
-            d = s['Дата поступления']
-            myfile.write(f'{num}. {a}. {n} - {d[6:10]} \n')
+            num = random.randint(1, records_num)
+            book_line = books[num]
+            author = book_line['Автор']
+            name = book_line['Название']
+            date = book_line['Дата поступления']
+            my_file.write(f'{num}. {author}. {name} - {date[6:10]} \n')
